@@ -1,4 +1,6 @@
-﻿namespace WebApplication2;
+﻿using System.Text.RegularExpressions;
+
+namespace WebApplication2;
 
 public interface ISsrfService
 {
@@ -13,5 +15,11 @@ public class SsrfService(IHttpClientFactory httpClientFactory) : ISsrfService
         var url = $"todos/{domain}";
         var response = await httpClient.GetAsync(url);
         return await response.Content.ReadAsStringAsync();
+    }
+
+    static bool IsValidDomain(string input)
+    {
+        string pattern = @"^(https?:\/\/)?[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$";
+        return Regex.IsMatch(input, pattern);
     }
 }
